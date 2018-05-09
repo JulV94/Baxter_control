@@ -1,0 +1,12 @@
+{
+  "name":"Super task",
+  "speed":0.3,
+  "accuracy":"default",
+  "limb":"left",
+  "waypoints":[
+    [1, 6],
+    [3, 7],
+    [8, 9],
+    [9, 4]
+  ]
+}
