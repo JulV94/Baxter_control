@@ -30,45 +30,37 @@
 """
 Baxter RSDK Joint Position Waypoints Tasks
 """
-import sys
+#import sys
 import rospy
 import baxter_interface
 import json
 
 class BaxterTask(object):
-    def __init__(self, config_file):
+    def __init__(self, robot, config_file):
+        # Store robot instance
+        self._robot = robot;
+
         # Config for the Task
-        self._config = load_file(config_file)
+        with open(filename) as f:
+            self._config = json.load(f)
 
         # Put default accuracy if not well specified
         self.format_accuracy()
 
-        # Create baxter_interface limb instance
-        self._arm = self._config["limb"]
-        self._limb = baxter_interface.Limb(self._arm)
-
         # joint angles in time
-        self._angles_list = self.inverse_kinematics()
-
-    def load_file(self, filename):
-        """
-        Load data from a json file
-        """
-        with open(filename) as f:
-            data = json.load(f)
-        return data
+        self._waypoints_angles = self.inverse_kinematics()
 
     def format_accuracy(self):
         if not isinstance(self._config["accuracy"], (int, float)):
             self._config["accuracy"] = baxter_interface.settings.JOINT_ANGLE_TOLERANCE
 
-    def inverse_kinematics():
+    def inverse_kinematics(self):
         """
         Calculate the inverse kinematics and returns the result
         """
         # take points from the self._config["waypoints"]
 
-    def get_name():
+    def get_name(self):
         return self._config["name"]
 
     def execute(self):
@@ -80,50 +72,63 @@ class BaxterTask(object):
         rospy.loginfo("Task Started")
 
         # Set joint position speed ratio for execution
-        self._limb.set_joint_position_speed(self._config["speed"])
+        self._robot.get_limb("left").set_joint_position_speed(self._config["speed"])
+        self._robot.get_limb("right").set_joint_position_speed(self._config["speed"])
 
         # Play the waypoints
-        for angles in self._angles_list:
+        for angles in self._waypoints_angles:
             if rospy.is_shutdown():
                 break
-            self._limb.move_to_joint_positions(angles, timeout=20.0,
-                                               threshold=self._config["accuracy"])
+            self._robot.get_limb(angles["limb"]).move_to_joint_positions(angles["values"], timeout=20.0, threshold=self._config["accuracy"])
 
         # Sleep for a few seconds
         rospy.sleep(3.0)
 
         # Set joint position speed back to default
-        self._limb.set_joint_position_speed(0.3)
+        self._robot.get_limb("left").set_joint_position_speed(0.3)
+        self._robot.get_limb("right").set_joint_position_speed(0.3)
 
-def enable_robot():
-    print("Getting robot state... ")
-    self._rs = baxter_interface.RobotEnable()
-    self._init_state = self._rs.state().enabled
-    print("Enabling robot... ")
-    self._rs.enable()
+class BaxterRobot(object):
+    def __init__(self):
+        # Init the limbs of the robot
+        self._limb_left = baxter_interface.Limb("left")
+        self._limb_right = baxter_interface.Limb("right")
 
-def shutdown_robot():
-    print("\nExiting code...")
-    if not self._init_state:
-        print("Disabling robot...")
-        self._rs.disable()
-    return True
+        # Init the robot
+        print("Getting robot state... ")
+        self._rs = baxter_interface.RobotEnable()
+        self._init_state = self._rs.state().enabled
+        print("Enabling robot... ")
+        self._rs.enable()
+
+    def get_limb(self, name):
+        if name == "left":
+            return self._limb_left
+        elif name == "right":
+            return self._limb_right
+        rospy.logerr("%s does not name any limb", name)
+        exit(1)
+
+    def shutdown_robot(self):
+        print("\nExiting code...")
+        if not self._init_state:
+            print("Disabling robot...")
+            self._rs.disable()
+        return True
 
 def main():
     """RSDK Joint Position Waypoints
 
     Calculate some waypoints from the inverse kinematics then move
     """
-
-    enable_robot()
-
     print("Initializing node... ")
     rospy.init_node("inverse_kinematics_task")
-
-    task = BaxterTask("task.json")
+    robot = BaxterRobot();
 
     # Register clean shutdown
-    rospy.on_shutdown(shutdown_robot)
+    rospy.on_shutdown(robot.shutdown_robot)
+
+    task = BaxterTask(robot, "task.json")
 
     # Begin example program
     print("Running task " + task.get_name())
