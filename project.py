@@ -34,6 +34,7 @@ Baxter RSDK Joint Position Waypoints Tasks
 import rospy
 import baxter_interface
 import json
+import math
 
 class BaxterTask(object):
     def __init__(self, robot, config_file):
@@ -59,6 +60,17 @@ class BaxterTask(object):
         Calculate the inverse kinematics and returns the result
         """
         # take points from the self._config["waypoints"]
+
+        xprime = math.sqrt(xc^2 + yc^2)
+        c3 = (xprime^2 + z^2 - a1^2 - a2^2)/(2*a1*a2)
+        s3 = math.sqrt(1 - c3)
+        
+        theta1 = math.atan2(y_c,x_c) + math.pi
+        theta2 = math.atan2(z,xprime) - math.atan2(a2*s3, a1 + a2*c3)
+        theta3 = math.atan2(s3,c3)
+        theta4 = 0
+        theta5 = - ( theta2 + theta3)
+        theta6 = 0
 
     def get_name(self):
         return self._config["name"]
