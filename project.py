@@ -34,7 +34,7 @@ Baxter RSDK Joint Position Waypoints Tasks
 import rospy
 import baxter_interface
 import json
-import math
+from math import atan2, sqrt, pi
 
 class BaxterTask(object):
     def __init__(self, robot, config_file):
@@ -59,21 +59,26 @@ class BaxterTask(object):
         """
         Calculate the inverse kinematics and returns the result
         """
-        # take points from the self._config["waypoints"]
+        results = list()
+        for waypoint in self._config["waypoints"]:
+            thetas = list()
+            a1 = 370.82
+    		a2 = 374.42
 
-		a1 = 370.82
-		a2 = 374.42
-		
-        xprime = math.sqrt(xc^2 + yc^2)    # xc, yc et z sont dans les coordonnées de la position à atteindre
-        c3 = (xprime^2 + z^2 - a1^2 - a2^2)/(2*a1*a2)
-        s3 = math.sqrt(1 - c3)
-        
-        theta1 = math.atan2(y_c,x_c) + math.pi
-        theta2 = math.atan2(z,xprime) - math.atan2(a2*s3, a1 + a2*c3)
-        theta3 = math.atan2(s3,c3)
-        theta4 = 0
-        theta5 = - ( theta2 + theta3)
-        theta6 = 0
+            xprime = sqrt(waypoint["x"]^2 + waypoint["y"]^2)    # xc, yc et z sont dans les coordonnées de la position à atteindre
+            c3 = (xprime^2 + waypoint["z"]^2 - a1^2 - a2^2)/(2*a1*a2)
+            s3 = sqrt(1 - c3)
+
+            thetas.append(atan2(waypoint["y"],waypoint["x"]) + pi)
+            thetas.append(atan2(z,xprime) - atan2(a2*s3, a1 + a2*c3))
+            thetas.append(atan2(s3,c3))
+            thetas.append(0)
+            thetas.append(-thetas[1] - thetas[2])
+            thetas.append(0)
+
+            results.append({"limb":waypoint["limb"], "values":dict(zip(self._robot.get_limb(waypoint["limb"]).joint_names(), thetas))})
+
+        return results
 
     def get_name(self):
         return self._config["name"]
