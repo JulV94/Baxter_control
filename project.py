@@ -61,7 +61,10 @@ class BaxterTask(object):
         """
         # take points from the self._config["waypoints"]
 
-        xprime = math.sqrt(xc^2 + yc^2)
+		a1 = 370.82
+		a2 = 374.42
+		
+        xprime = math.sqrt(xc^2 + yc^2)    # xc, yc et z sont dans les coordonnées de la position à atteindre
         c3 = (xprime^2 + z^2 - a1^2 - a2^2)/(2*a1*a2)
         s3 = math.sqrt(1 - c3)
         
