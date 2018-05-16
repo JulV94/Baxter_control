@@ -42,7 +42,7 @@ class BaxterTask(object):
         self._robot = robot;
 
         # Config for the Task
-        with open(filename) as f:
+        with open(config_file) as f:
             self._config = json.load(f)
 
         # Put default accuracy if not well specified
