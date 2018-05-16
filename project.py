@@ -71,6 +71,7 @@ class BaxterTask(object):
 
             thetas.append(atan2(waypoint["y"],waypoint["x"]) + pi)
             thetas.append(atan2(waypoint["z"],xprime) - atan2(a2*s3, a1 + a2*c3))
+            thetas.append(0)
             thetas.append(atan2(s3,c3))
             thetas.append(0)
             thetas.append(-thetas[1] - thetas[2])
