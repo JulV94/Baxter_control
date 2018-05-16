@@ -63,9 +63,9 @@ class BaxterTask(object):
         for waypoint in self._config["waypoints"]:
             thetas = list()
             a1 = 370.82
-    		a2 = 374.42
+    	    a2 = 374.42
 
-            xprime = sqrt(waypoint["x"]^2 + waypoint["y"]^2)    # xc, yc et z sont dans les coordonnées de la position à atteindre
+            xprime = sqrt(waypoint["x"]^2 + waypoint["y"]^2) 
             c3 = (xprime^2 + waypoint["z"]^2 - a1^2 - a2^2)/(2*a1*a2)
             s3 = sqrt(1 - c3)
 
