@@ -99,12 +99,12 @@ class BaxterTask(object):
         self._robot.get_limb("right").set_joint_position_speed(self._config["speed"])
 
         # Play the waypoints
-        for angles in self._waypoints_angles:
+        for i in range(len(self._waypoints_angles)):
             if rospy.is_shutdown():
                 break
-            rospy.loginfo("Goes to position : " + self._config["waypoints"]["x"] + ", " + self._config["waypoints"]["y"] + ", " + self._config["waypoints"]["z"])
-            rospy.loginfo("Generated angles are : " + str(angles["values"]))
-            self._robot.get_limb(angles["limb"]).move_to_joint_positions(angles["values"], timeout=20.0, threshold=self._config["accuracy"])
+            rospy.loginfo("Goes to position : " + self._config["waypoints"][i]["x"] + ", " + self._config["waypoints"][i]["y"] + ", " + self._config["waypoints"][i]["z"])
+            rospy.loginfo("Generated angles are : " + str(self._waypoints_angles[i]["values"]))
+            self._robot.get_limb(self._waypoints_angles[i]["limb"]).move_to_joint_positions(self._waypoints_angles[i]["values"], timeout=20.0, threshold=self._config["accuracy"])
 
         # Sleep for a few seconds
         rospy.sleep(3.0)
