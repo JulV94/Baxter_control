@@ -65,7 +65,7 @@ class BaxterTask(object):
             a1 = 370.82
     	    a2 = 374.42
 
-            xprime = sqrt(waypoint["x"]*waypoint["x"] + waypoint["y"]*waypoint["y"]) 
+            xprime = sqrt(waypoint["x"]*waypoint["x"] + waypoint["y"]*waypoint["y"])
             c3 = (xprime*xprime + waypoint["z"]*waypoint["z"] - a1*a1 - a2*a2)/(2*a1*a2)
             s3 = sqrt(1 - c3)
 
@@ -149,7 +149,7 @@ def main():
     # Register clean shutdown
     rospy.on_shutdown(robot.shutdown_robot)
 
-    task = BaxterTask(robot, "task.json")
+    task = BaxterTask(robot, "src/baxter_examples/scripts/task.json")
 
     # Begin example program
     print("Running task " + task.get_name())
