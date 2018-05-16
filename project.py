@@ -66,7 +66,7 @@ class BaxterTask(object):
     	    a2 = 374.42
 
             xprime = sqrt(waypoint["x"]*waypoint["x"] + waypoint["y"]*waypoint["y"])
-	    zprime = waypoint["z"]-229.52
+            zprime = waypoint["z"]-229.52
             c3 = (xprime*xprime + zprime*zprime - a1*a1 - a2*a2)/(2*a1*a2)
             s3 = sqrt(1 - c3)
 
@@ -92,7 +92,7 @@ class BaxterTask(object):
         """
         rospy.sleep(1.0)
 
-        rospy.loginfo("Task Started")
+        rospy.loginfo("Task " + self._config["name"] + "Started")
 
         # Set joint position speed ratio for execution
         self._robot.get_limb("left").set_joint_position_speed(self._config["speed"])
@@ -102,6 +102,8 @@ class BaxterTask(object):
         for angles in self._waypoints_angles:
             if rospy.is_shutdown():
                 break
+            rospy.loginfo("Goes to position : " + self._config["waypoints"]["x"] + ", " + self._config["waypoints"]["y"] + ", " + self._config["waypoints"]["z"])
+            rospy.loginfo("Generated angles are : " + str(angles["values"]))
             self._robot.get_limb(angles["limb"]).move_to_joint_positions(angles["values"], timeout=20.0, threshold=self._config["accuracy"])
 
         # Sleep for a few seconds
@@ -119,10 +121,10 @@ class BaxterRobot(object):
         self._limb_right = baxter_interface.Limb("right")
 
         # Init the robot
-        print("Getting robot state... ")
+        rospy.loginfo("Getting robot state... ")
         self._rs = baxter_interface.RobotEnable()
         self._init_state = self._rs.state().enabled
-        print("Enabling robot... ")
+        rospy.loginfo("Enabling robot... ")
         self._rs.enable()
 
     def get_limb(self, name):
@@ -134,9 +136,9 @@ class BaxterRobot(object):
         exit(1)
 
     def shutdown_robot(self):
-        print("\nExiting code...")
+        rospy.loginfo("\nExiting code...")
         if not self._init_state:
-            print("Disabling robot...")
+            rospy.loginfo("Disabling robot...")
             self._rs.disable()
         return True
 
@@ -154,7 +156,7 @@ def main():
     task = BaxterTask(robot, "src/baxter_examples/scripts/task.json")
 
     # Begin example program
-    print("Running task " + task.get_name())
+    rospy.loginfo("Running task " + task.get_name())
     task.execute()
 
 if __name__ == '__main__':
