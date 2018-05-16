@@ -112,7 +112,7 @@ class BaxterTask(object):
 class BaxterRobot(object):
     def __init__(self):
         # Init the limbs of the robot
-	rospy.init_node("inverse_kinematics_task")
+	    rospy.init_node("inverse_kinematics_task")
         self._limb_left = baxter_interface.Limb("left")
         self._limb_right = baxter_interface.Limb("right")
 
