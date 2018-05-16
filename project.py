@@ -66,11 +66,13 @@ class BaxterTask(object):
     	    a2 = 374.42
 
             xprime = sqrt(waypoint["x"]*waypoint["x"] + waypoint["y"]*waypoint["y"])
-            c3 = (xprime*xprime + waypoint["z"]*waypoint["z"] - a1*a1 - a2*a2)/(2*a1*a2)
+	    zprime = waypoint["z"]-229.52
+            c3 = (xprime*xprime + zprime*zprime - a1*a1 - a2*a2)/(2*a1*a2)
             s3 = sqrt(1 - c3)
 
+
             thetas.append(atan2(waypoint["y"],waypoint["x"]) + pi)
-            thetas.append(atan2(waypoint["z"],xprime) - atan2(a2*s3, a1 + a2*c3))
+            thetas.append(atan2(zprime,xprime) - atan2(a2*s3, a1 + a2*c3))
             thetas.append(0)
             thetas.append(atan2(s3,c3))
             thetas.append(0)
@@ -112,7 +114,8 @@ class BaxterTask(object):
 class BaxterRobot(object):
     def __init__(self):
         # Init the limbs of the robot
-        rospy.init_node("inverse_kinematics_task")        self._limb_left = baxter_interface.Limb("left")
+        rospy.init_node("inverse_kinematics_task")
+        self._limb_left = baxter_interface.Limb("left")
         self._limb_right = baxter_interface.Limb("right")
 
         # Init the robot
