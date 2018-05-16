@@ -112,6 +112,7 @@ class BaxterTask(object):
 class BaxterRobot(object):
     def __init__(self):
         # Init the limbs of the robot
+	rospy.init_node("inverse_kinematics_task")
         self._limb_left = baxter_interface.Limb("left")
         self._limb_right = baxter_interface.Limb("right")
 
@@ -143,7 +144,6 @@ def main():
     Calculate some waypoints from the inverse kinematics then move
     """
     print("Initializing node... ")
-    rospy.init_node("inverse_kinematics_task")
     robot = BaxterRobot();
 
     # Register clean shutdown
