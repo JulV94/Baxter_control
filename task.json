@@ -3,10 +3,6 @@
   "speed":0.3,
   "accuracy":"default",
   "waypoints":[
-    {"limb":"left", "x":100, "y":100, "z":100},
-    {"limb":"left", "x":6, "y":5, "z":4},
-    {"limb":"left", "x":6, "y":9, "z":2},
-    {"limb":"left", "x":0, "y":1, "z":9},
-    {"limb":"left", "x":0, "y":0, "z":0}
+    {"limb":"left", "x":0.5, "y":-0.7, "z":0.5}
   ]
 }

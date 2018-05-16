@@ -62,22 +62,22 @@ class BaxterTask(object):
         results = list()
         for waypoint in self._config["waypoints"]:
             thetas = list()
-            a1 = 370.82
-    	    a2 = 374.42
+            a1 = 0.37082
+    	    a2 = 0.37442
 
             xprime = sqrt(waypoint["x"]*waypoint["x"] + waypoint["y"]*waypoint["y"])
-            zprime = waypoint["z"]-229.52
+            zprime = waypoint["z"]-0.22952
             c3 = (xprime*xprime + zprime*zprime - a1*a1 - a2*a2)/(2*a1*a2)
-            s3 = sqrt(1 - c3)
+            s3 = sqrt(1 - c3*c3)
 
-
-            thetas.append(atan2(waypoint["y"],waypoint["x"]) + pi)
-            thetas.append(atan2(zprime,xprime) - atan2(a2*s3, a1 + a2*c3))
+            thetas.append(atan2(waypoint["y"],waypoint["x"]))
+            thetas.append(-atan2(zprime,xprime) + atan2(a2*s3, a1 + a2*c3))
             thetas.append(0)
             thetas.append(atan2(s3,c3))
             thetas.append(0)
-            thetas.append(-thetas[1] - thetas[2])
+	    thetas.append(pi/2 - thetas[1] - thetas[3])
             thetas.append(0)
+
 
             results.append({"limb":waypoint["limb"], "values":dict(zip(self._robot.get_limb(waypoint["limb"]).joint_names(), thetas))})
 
@@ -102,7 +102,7 @@ class BaxterTask(object):
         for i in range(len(self._waypoints_angles)):
             if rospy.is_shutdown():
                 break
-            rospy.loginfo("Goes to position : " + self._config["waypoints"][i]["x"] + ", " + self._config["waypoints"][i]["y"] + ", " + self._config["waypoints"][i]["z"])
+            rospy.loginfo("Goes to position : " + str(self._config["waypoints"][i]["x"]) + ", " + str(self._config["waypoints"][i]["y"]) + ", " + str(self._config["waypoints"][i]["z"]))
             rospy.loginfo("Generated angles are : " + str(self._waypoints_angles[i]["values"]))
             self._robot.get_limb(self._waypoints_angles[i]["limb"]).move_to_joint_positions(self._waypoints_angles[i]["values"], timeout=20.0, threshold=self._config["accuracy"])
 
