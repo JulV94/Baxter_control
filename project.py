@@ -65,13 +65,13 @@ class BaxterTask(object):
             a1 = 0.37082
     	    a2 = 0.37442
 
-            xprime = sqrt(waypoint["x"]*waypoint["x"] + waypoint["y"]*waypoint["y"])
-            zprime = waypoint["z"]-0.22952
+            xprime = sqrt(waypoint["x"]*waypoint["x"] + waypoint["y"]*waypoint["y"]) -0.069 
+            zprime = waypoint["z"]-0.22952+0.27035                  
             c3 = (xprime*xprime + zprime*zprime - a1*a1 - a2*a2)/(2*a1*a2)
             s3 = sqrt(1 - c3*c3)
 
             thetas.append(atan2(waypoint["y"],waypoint["x"]))
-            thetas.append(-atan2(zprime,xprime) + atan2(a2*s3, a1 + a2*c3))
+            thetas.append(atan2(zprime,xprime) - atan2(a2*s3, a1 + a2*c3))
             thetas.append(0)
             thetas.append(atan2(s3,c3))
             thetas.append(0)
