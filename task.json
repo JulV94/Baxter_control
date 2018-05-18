@@ -3,6 +3,7 @@
   "speed":0.3,
   "accuracy":"default",
   "waypoints":[
-    {"limb":"left", "x":0.5, "y":-0.7, "z":0.5}
+    {"limb":"left", "x":0.4, "y":-0.5, "z":-0.2},
+    {"limb":"right", "x":0.4, "y":0, "z":-0.2}
   ]
 }
