@@ -175,8 +175,9 @@ class BaxterRobot(object):
     def disconnectButtonState(self):
         self._navigator_io.button2_changed.disconnect(self.incrementState)
 
-    def incrementState(self):
-        self.state += 1
+    def incrementState(self, value):
+        if value:
+            self.state += 1
 
     def resetState(self):
         self.state = 0
