@@ -151,6 +151,9 @@ class BaxterRobot(object):
         self._gripper_left = baxter_interface.Gripper("left", baxter_interface.CHECK_VERSION)
         self._gripper_right = baxter_interface.Gripper("right", baxter_interface.CHECK_VERSION)
 
+        self._gripper_left.calibrate()
+        self._gripper_right.calibrate()
+
         # Create Navigator I/O
         self._navigator_left = baxter_interface.Navigator("left")
         self._navigator_right = baxter_interface.Navigator("right")
