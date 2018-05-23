@@ -64,9 +64,9 @@ class BaxterTask(object):
         for point in points:
             for initpoint in self._config["initpoints"]:
                 if point["limb"] == initpoint["limb"]:
-                    point["x"] += self._config["initpoints"]["x"]
-                    point["y"] += self._config["initpoints"]["y"]
-                    point["z"] += self._config["initpoints"]["z"]
+                    point["x"] += initpoint["x"]
+                    point["y"] += initpoint["y"]
+                    point["z"] += initpoint["z"]
 
     def inverse_kinematics(self, points):
         """
