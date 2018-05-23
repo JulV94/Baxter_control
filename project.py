@@ -48,43 +48,73 @@ class BaxterTask(object):
         # Put default accuracy if not well specified
         self.format_accuracy()
 
+        # Change points to absolute positions
+        self.relToAbsolutePosition(self._config["waypoints"])
+
         # joint angles in time
-        self._waypoints_angles = self.inverse_kinematics()
+        self._grippoints_angles = self.inverse_kinematics(self._config["grippoints"])
+        self._initpoints_angles = self.inverse_kinematics(self._config["initpoints"])
+        self._waypoints_angles = self.inverse_kinematics(self._config["waypoints"])
 
     def format_accuracy(self):
         if not isinstance(self._config["accuracy"], (int, float)):
             self._config["accuracy"] = baxter_interface.settings.JOINT_ANGLE_TOLERANCE
 
-    def inverse_kinematics(self):
+    def relToAbsolutePosition(self, points):
+        for point in points:
+            for initpoint in self._config["initpoints"]:
+                if point["limb"] == initpoint["limb"]:
+                    point["x"] += self._config["initpoints"]["x"]
+                    point["y"] += self._config["initpoints"]["y"]
+                    point["z"] += self._config["initpoints"]["z"]
+
+    def inverse_kinematics(self, points):
         """
         Calculate the inverse kinematics and returns the result
         """
         results = list()
-        for waypoint in self._config["waypoints"]:
+        for point in points:
             thetas = list()
             a1 = 0.37082
     	    a2 = 0.37442
 
-            xprime = sqrt(waypoint["x"]*waypoint["x"] + waypoint["y"]*waypoint["y"]) -0.069 
-            zprime = waypoint["z"]-0.22952+0.27035                  
+            xprime = sqrt(point["x"]*point["x"] + point["y"]*point["y"]) -0.069
+            zprime = point["z"]-0.22952+0.27035
             c3 = (xprime*xprime + zprime*zprime - a1*a1 - a2*a2)/(2*a1*a2)
             s3 = sqrt(1 - c3*c3)
 
-            thetas.append(atan2(waypoint["y"],waypoint["x"]))
+            if point["limb"] == "left":
+                angle = -pi/4
+            else:
+                angle = pi/4
+
+            thetas.append(atan2(point["y"],point["x"]) + angle)
             thetas.append(atan2(zprime,xprime) - atan2(a2*s3, a1 + a2*c3))
             thetas.append(0)
             thetas.append(atan2(s3,c3))
             thetas.append(0)
-	    thetas.append(pi/2 - thetas[1] - thetas[3])
+            thetas.append(pi/2 - thetas[1] - thetas[3])
             thetas.append(0)
 
 
-            results.append({"limb":waypoint["limb"], "values":dict(zip(self._robot.get_limb(waypoint["limb"]).joint_names(), thetas))})
+            results.append({"limb":point["limb"], "values":dict(zip(self._robot.get_limb(point["limb"]).joint_names(), thetas))})
 
         return results
 
     def get_name(self):
         return self._config["name"]
+
+    def waitingToGrip(self):
+        gotoPoints(self._grippoints_angles)
+        # Here the fucking gripper code
+
+    def gotoPoints(self, points):
+        # Play the waypoints
+        for point in points:
+            if rospy.is_shutdown():
+                break
+            rospy.loginfo("Generated angles are : " + str(point["values"]))
+            self._robot.get_limb(point["limb"]).move_to_joint_positions(point["values"], timeout=20.0, threshold=self._config["accuracy"])
 
     def execute(self):
         """
@@ -98,13 +128,11 @@ class BaxterTask(object):
         self._robot.get_limb("left").set_joint_position_speed(self._config["speed"])
         self._robot.get_limb("right").set_joint_position_speed(self._config["speed"])
 
-        # Play the waypoints
-        for i in range(len(self._waypoints_angles)):
-            if rospy.is_shutdown():
-                break
-            rospy.loginfo("Goes to position : " + str(self._config["waypoints"][i]["x"]) + ", " + str(self._config["waypoints"][i]["y"]) + ", " + str(self._config["waypoints"][i]["z"]))
-            rospy.loginfo("Generated angles are : " + str(self._waypoints_angles[i]["values"]))
-            self._robot.get_limb(self._waypoints_angles[i]["limb"]).move_to_joint_positions(self._waypoints_angles[i]["values"], timeout=20.0, threshold=self._config["accuracy"])
+        self.waitingToGrip()
+        self._robot.waitForStateChange()
+        self.gotoPoints(self._initpoints_angles)
+        self._robot.waitForStateChange()
+        self.gotoPoints(self._waypoints_angles)
 
         # Sleep for a few seconds
         rospy.sleep(3.0)
@@ -120,6 +148,12 @@ class BaxterRobot(object):
         self._limb_left = baxter_interface.Limb("left")
         self._limb_right = baxter_interface.Limb("right")
 
+        # Create Navigator I/O
+        self._navigator_io = baxter_interface.Navigator("left")
+
+        # State of the robot
+        self.state = 0;
+
         # Init the robot
         rospy.loginfo("Getting robot state... ")
         self._rs = baxter_interface.RobotEnable()
@@ -134,6 +168,24 @@ class BaxterRobot(object):
             return self._limb_right
         rospy.logerr("%s does not name any limb", name)
         exit(1)
+
+    def connectButtonState(self):
+        self._navigator_io.button2_changed.connect(self.incrementState)
+
+    def disconnectButtonState(self):
+        self._navigator_io.button2_changed.disconnect(self.incrementState)
+
+    def incrementState(self):
+        self.state += 1
+
+    def resetState(self):
+        self.state = 0
+
+    def waitForStateChange(self):
+        self.connectButtonState()
+        while (self.state != 1) and not rospy.is_shutdown():
+            rospy.sleep(1.0)
+        self.disconnectButtonState()
 
     def shutdown_robot(self):
         rospy.loginfo("\nExiting code...")
