@@ -105,7 +105,7 @@ class BaxterTask(object):
         return self._config["name"]
 
     def waitingToGrip(self):
-        gotoPoints(self._grippoints_angles)
+        self.gotoPoints(self._grippoints_angles)
         # Here the fucking gripper code
 
     def gotoPoints(self, points):
