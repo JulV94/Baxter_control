@@ -189,11 +189,11 @@ class BaxterRobot(object):
         self.state = 0
 
     def gripperControl(self):
-        self._navigator_left.wheel_changed.connect(leftWheelMoved)
-        self._navigator_right.wheel_changed.connect(rightWheelMoved)
+        self._navigator_left.wheel_changed.connect(self.leftWheelMoved)
+        self._navigator_right.wheel_changed.connect(self.rightWheelMoved)
         self.waitForStateChange(1)
-        self._navigator_left.wheel_changed.disconnect(leftWheelMoved)
-        self._navigator_right.wheel_changed.disconnect(rightWheelMoved)
+        self._navigator_left.wheel_changed.disconnect(self.leftWheelMoved)
+        self._navigator_right.wheel_changed.disconnect(self.rightWheelMoved)
 
     def leftWheelMoved(self, value):
         self._gripper_left.command_position(value/2.55)
