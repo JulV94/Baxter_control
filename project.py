@@ -196,10 +196,10 @@ class BaxterRobot(object):
         self._navigator_right.wheel_changed.disconnect(rightWheelMoved)
 
     def leftWheelMoved(self, value):
-        self._gripper_left.command_position(value)
+        self._gripper_left.command_position(value/2.55)
 
     def rightWheelMoved(self, value):
-        self._gripper_right.command_position(value)
+        self._gripper_right.command_position(value/2.55)
 
     def waitForStateChange(self, state):
         self.connectButtonState()
