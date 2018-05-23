@@ -154,6 +154,9 @@ class BaxterRobot(object):
         self._gripper_left.calibrate()
         self._gripper_right.calibrate()
 
+        self._gripper_left_pos = 100.0
+        self._gripper_right_pos = 100.0
+
         # Create Navigator I/O
         self._navigator_left = baxter_interface.Navigator("left")
         self._navigator_right = baxter_interface.Navigator("right")
@@ -199,10 +202,20 @@ class BaxterRobot(object):
         self._navigator_right.wheel_changed.disconnect(self.rightWheelMoved)
 
     def leftWheelMoved(self, value):
-        self._gripper_left.command_position(self._navigator_left.wheel/2.55)
+        self._gripper_left_pos += value * 5
+        if self._gripper_left_pos < 0.0:
+            self._gripper_left_pos = 0.0
+        elif self._gripper_left_pos > 100.0:
+            self._gripper_left_pos = 100.0
+        self._gripper_left.command_position(self._gripper_left_pos)
 
     def rightWheelMoved(self, value):
-        self._gripper_right.command_position(self._navigator_right.wheel/2.55)
+        self._gripper_right_pos += value * 5
+        if self._gripper_right_pos < 0.0:
+            self._gripper_right_pos = 0.0
+        elif self._gripper_right_pos > 100.0:
+            self._gripper_right_pos = 100.0
+        self._gripper_right.command_position(self._gripper_right_pos)
 
     def waitForStateChange(self, state):
         self.connectButtonState()
