@@ -14,6 +14,7 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\colorlet{codered}{red!60!black}
  
 \lstdefinestyle{pythonColor}{
     backgroundcolor=\color{backcolour},   
@@ -21,7 +22,7 @@
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
-    basicstyle=\footnotesize,
+    basicstyle=\footnotesize\ttfamily,
     breakatwhitespace=false,         
     breaklines=true,                 
     captionpos=b,                    
@@ -32,6 +33,37 @@
     showstringspaces=false,
     showtabs=false,                  
     tabsize=2
+}
+
+\lstdefinelanguage{json}{
+    backgroundcolor=\color{backcolour},
+    numberstyle=\tiny\color{codegray},
+    string=[s]{"}{"},
+    stringstyle=\color{blue},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    literate=
+     *{0}{{{\color{codepurple}0}}}{1}
+      {1}{{{\color{codepurple}1}}}{1}
+      {2}{{{\color{codepurple}2}}}{1}
+      {3}{{{\color{codepurple}3}}}{1}
+      {4}{{{\color{codepurple}4}}}{1}
+      {5}{{{\color{codepurple}5}}}{1}
+      {6}{{{\color{codepurple}6}}}{1}
+      {7}{{{\color{codepurple}7}}}{1}
+      {8}{{{\color{codepurple}8}}}{1}
+      {9}{{{\color{codepurple}9}}}{1}
+      {:}{{{\color{codered}{:}}}}{1}
+      {,}{{{\color{codered}{,}}}}{1},
 }
 
 \title{Robotics Project}
