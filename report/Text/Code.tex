@@ -1,0 +1,18 @@
+\chapter{Implementation}
+
+
+\section{Introduction}
+
+In order to be able to control the Baxter robot, a ROS environment has to be installed and configured on Ubuntu. The Ubuntu Operating System is run on a virtual machine called VMWare. To test the inverse kinematics calculations described in Chapter \ref{chap:inv kin} without the physical Baxter robot, the Gazebo simulator software is used locally on the virtual machine. When the python code for the inverse kinematics is validated on the simulator, the same code can be tested on the physical robot. 
+
+\section{Problems encountered and solutions}
+Some problems were encountered during the project.\\
+First the x-axis was oriented at 45$^\circ$ compared to the robot so an offset had to be added to have the x-axis if front of it, but it was to be positive for the right arm and negative for the left one. \\
+The orientation of the axis had also to be verified. The group has indeed seen that the x-axis was in front of the robot after the off-set angle, both y-axis are pointing to the right and both z-axis are pointing to the bottom.\\
+The sign of the value for the position in the inverse kinematic has to take it into account.\\
+Another huge problem using this robot is the limit of the task and joint space of Baxter.
+The task must be on a table so the range of displacement is quite limited but the place that was available on the table was close to the limit of its range. So the first point of reference had to be adjust to be at a good position.
+
+\section{Python code}
+\lstinputlisting[language=Python, frame=single, style=pythonColor]{../project.py}
+\lstinputlisting[language=json, frame=single]{../task.json}

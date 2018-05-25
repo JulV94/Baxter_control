@@ -1,0 +1,89 @@
+% This template was designed by Ruben De Smet. Visit his website at https://gitlab.com/rubdos/texlive-vub
+% License: LaTeX Project Public License 1.3c
+
+\documentclass{report}
+\usepackage{bruface}
+\usepackage{url} 
+\usepackage{cleveref}
+\usepackage{amsmath}
+\usepackage{gensymb}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\colorlet{codered}{red!60!black}
+ 
+\lstdefinestyle{pythonColor}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstdefinelanguage{json}{
+    backgroundcolor=\color{backcolour},
+    numberstyle=\tiny\color{codegray},
+    string=[s]{"}{"},
+    stringstyle=\color{blue},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    literate=
+     *{0}{{{\color{codepurple}0}}}{1}
+      {1}{{{\color{codepurple}1}}}{1}
+      {2}{{{\color{codepurple}2}}}{1}
+      {3}{{{\color{codepurple}3}}}{1}
+      {4}{{{\color{codepurple}4}}}{1}
+      {5}{{{\color{codepurple}5}}}{1}
+      {6}{{{\color{codepurple}6}}}{1}
+      {7}{{{\color{codepurple}7}}}{1}
+      {8}{{{\color{codepurple}8}}}{1}
+      {9}{{{\color{codepurple}9}}}{1}
+      {:}{{{\color{codered}{:}}}}{1}
+      {,}{{{\color{codered}{,}}}}{1},
+}
+
+\title{Robotics Project}
+\subtitle{Inverse kinematics for Baxter robot}
+\author{Vincent Ducastel \\ Alexandre La Grappe \\ Tom Vandenbussche \\ Julien Van Loo}
+\faculty{Engineering Science}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\clearpage
+
+\input{Text/InvKin}
+\clearpage
+
+\include{Text/Code}
+\clearpage
+
+\input{Text/References}
+\clearpage
+
+\end{document}
