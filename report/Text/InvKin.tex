@@ -111,11 +111,11 @@ The calculations for the inverse kinematics can be simplified based on the tasks
 \end{figure}
 
 \bigskip
-A first observation is that the last link in the kinematic chain can stay in a vertical position during the whole execution process. Also, the paint brush does not have to rotate around the vertical axis, so that joint W2 can be fixed. Since it is assumed that there are no specific constrains for the workspace of the robot arm, there are still some redundant degrees of freedom that will not be used. Therefore, joint W0 can also be fixed.
+A first observation is that the last link in the kinematic chain can stay in a vertical position during the whole execution process. Also, the paint brush does not have to rotate around the vertical axis, so that joint W2 can be fixed. Since it is assumed that there are no specific constrains for the workspace of the robot arm, there are still some redundant degrees of freedom that will not be used. Therefore, joint W0 can also be fixed. Further developments will be discussed in
 
 
 \section{Inverse kinematics}
-
+\label{sec: inv}
 The equations for the inverse kinematics can be complicate so the group has try to simplify them as much as possible.\\
 The six remaining joints of the robot can be divided in two parts. The three last joint correspond to a spherical wrist and so will focus on the orientation of the end-effector while the three other joints will be used to put the end-effector at the right position.\\
 
