@@ -247,7 +247,7 @@ def main():
     """
     print("Initializing node... ")
     robot = BaxterRobot();
-
+     
     # Register clean shutdown
     rospy.on_shutdown(robot.shutdown_robot)
 
