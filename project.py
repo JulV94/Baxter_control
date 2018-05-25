@@ -68,6 +68,15 @@ class BaxterTask(object):
                     point["y"] += initpoint["y"]
                     point["z"] += initpoint["z"]
 
+    def checkAngleLimits(self, angles, point):
+        for i in range(len(thetas)):
+            if thetas[i] > self._config["anglelimits"][i]["max"]:
+                rospy.loginfo("For point (" + str(point["x"]) + "," + str(point["y"]) + "," + str(point["z"]) + ")")
+                rospy.loginfo("Angle " + str(i) + " max: " + str(self._config["anglelimits"][i]["max"]) + "/value: " + str(thetas[i]))
+            elif thetas[i] < self._config["anglelimits"][i]["min"]:
+                rospy.loginfo("For point (" + str(point["x"]) + "," + str(point["y"]) + "," + str(point["z"]) + ")")
+                rospy.loginfo("Angle " + str(i) + " min: " + str(self._config["anglelimits"][i]["min"]) + "/value: " + str(thetas[i]))
+
     def inverse_kinematics(self, points):
         """
         Calculate the inverse kinematics and returns the result
@@ -96,6 +105,7 @@ class BaxterTask(object):
             thetas.append(pi/2 - thetas[1] - thetas[3])
             thetas.append(0)
 
+            self.checkAngleLimits(thetas, point)
 
             results.append({"limb":point["limb"], "values":dict(zip(self._robot.get_limb(point["limb"]).joint_names(), thetas))})
 
