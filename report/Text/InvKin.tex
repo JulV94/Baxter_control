@@ -13,7 +13,7 @@ The robot used for this project is the Baxter and the task that it has to execut
 To be able to compute the inverse kinematics of a robot efficiently in a minimal and systematic way, the kinematics of the system can be described using Denativ-Hartenberg parameters. \\
 Before doing this, it is important to note that Baxter has seven joints for each arm (which means 7 degrees of freedom) while a task in the real world 3D space needs only six degrees of freedom, namely three rotations and three translations. Therefore, the arms of Baxter have one redundant degree of freedom for general tasks.\\
 Redundancy can be helpful for avoiding obstacles, increasing the range of the workspace or allow to reach a position and orientation by avoiding it nevertheless it adds complexity for the problem.\\
-The group has chosen in this case to fix a joint, $E_0$ not represented in the Figure (\ref{fig:prios}) but present on the information on Baxter website.\footnote{http://sdk.rethinkrobotics.com/wiki/Hardware\_Specifications} \\
+The group has chosen in this case to fix a joint, $E_0$ not represented in the Figure (\ref{fig:prios}) but present on the information on Baxter website.\footnote{\url{http://sdk.rethinkrobotics.com/wiki/Hardware\_Specifications}} \\
 
 The first thing to do to calculate the DH parameters is to fix the frame of each joint. Some rules has to be respected: \\
 \begin{itemize}
@@ -30,7 +30,7 @@ However two specific cases still have to be defined: \\
 \item if $z_i$ and $z_{i-1}$ are incident, the positive direction of $x_i$ can be chosen arbitrairly ( however, it is often chosen so that $x_i = z_i$ x $z_{i-1}$)
 \end{itemize}
 
- \begin{figure}[h!]
+ \begin{figure}[!ht]
 	\centering
     \includegraphics[width = 0.7\textwidth]{Images/DHparam}
     \caption{Schematic drawing of the Baxter arm for the determination of the DH parameters.}
@@ -48,7 +48,7 @@ Rules have to be followed again:\\
 
 A summary of the determination of these parameters coming from the course.\footnote{Course of robotics of Michael Van Damme}
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 	\centering
     \includegraphics[width = 0.9\textwidth]{Images/DHparameters}
     \caption{Determination of DH parameters}
@@ -106,7 +106,7 @@ The calculations for the inverse kinematics can be simplified based on the tasks
 \noindent The task that the robot will execute is the following: the robot will pick a paint brush, dip it in a cup with some acrylic paint, draw a circle on a sheet of paper and then place the brush in a cup of water. To calibrate the orientation of the paper sheet at the beginning of the execution, to robot arm will first point to two reference points, which will have to correspond to those shown in Figure \ref{fig:Task}. The robot will then bring the brush to the consecutive waypoints, which all have their specific coordinates.
 
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 	\centering
     \includegraphics[width = 0.6\textwidth]{Images/Task}
     \caption{Projection of the waypoints describing the task on the X-Y plane, which corresponds to the table surface.}
@@ -161,11 +161,11 @@ The angle $\theta1$ correspond to the orientation of the arm. It is calculated t
 
 \noindent The two last angles are slightly more difficult to calculate.\\
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 	\centering
     \includegraphics[width = 0.7\textwidth]{Images/angles}
     \caption{Calculation of $\theta_2$ and $\theta_3$}
-    \label{fig:DH}
+    \label{fig:angles}
 \end{figure}
 
 The angle $\pi - \theta_3$ is found thanks to Pythagore.\\

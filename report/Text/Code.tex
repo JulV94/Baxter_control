@@ -1,9 +1,8 @@
 \chapter{Implementation}
 
-
 \section{Introduction}
 
-In order to be able to control the Baxter robot, a ROS environment has to be installed and configured on Ubuntu. The Ubuntu Operating System is run on a virtual machine called VMWare. To test the inverse kinematics calculations described in Chapter \ref{chap:inv kin} without the physical Baxter robot, the Gazebo simulator software is used locally on the virtual machine. When the python code for the inverse kinematics is validated on the simulator, the same code can be tested on the physical robot. 
+\paragraph{}In order to be able to control the Baxter robot, a ROS environment has to be installed and configured on Ubuntu\footnote{\url{http://sdk.rethinkrobotics.com/wiki/Workstation_Setup}}. The Ubuntu Operating System is run on a virtual machine using the VMWare software. To test the inverse kinematics calculations described in Chapter \ref{chap:inv kin} without the physical Baxter robot, the Gazebo simulator software is used locally on the virtual machine. When the python code for the inverse kinematics is validated on the simulator, the same code can be tested on the physical robot. 
 
 \section{Problems encountered and solutions}
 Some problems were encountered during the project.\\
@@ -14,5 +13,8 @@ Another huge problem using this robot is the limit of the task and joint space o
 The task must be on a table so the range of displacement is quite limited but the place that was available on the table was close to the limit of its range. So the first point of reference had to be adjust to be at a good position.
 
 \section{Python code}
+\paragraph{}The code is written in Python programming language using rospy module\footnote{\url{https://github.com/ros/ros_comm}} and the baxter interface\footnote{\url{https://github.com/RethinkRobotics/baxter_interface}} to control the different parts of the robot. The code is made of 2 classes. The first one is the BaxterTask class that represents the task that we have to accomplish. To define the parameters of the task, a JSON file must be provided to the class containing everything needed such as the points the robot must achieve or the speed at which the robot must move. The other class is the BaxterRobot class which manage all the communications with the robot. Finally, the main function boils down to the creation of an instance of each of these classes and calls the execute function of the BaxterTask class.
 \lstinputlisting[language=Python, frame=single, style=pythonColor]{../project.py}
 \lstinputlisting[language=json, frame=single]{../task.json}
+
+\section{Result}
