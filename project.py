@@ -24,7 +24,7 @@ class BaxterTask(object):
         self.format_accuracy()
 
         # Change points to absolute positions
-        self.relToAbsolutePosition(self._config["waypoints"])
+        self.rel_to_absolute_position(self._config["waypoints"])
 
         # joint angles in time
         self._grippoints_angles = self.inverse_kinematics(self._config["grippoints"])
@@ -38,7 +38,7 @@ class BaxterTask(object):
         if not isinstance(self._config["accuracy"], (int, float)):
             self._config["accuracy"] = baxter_interface.settings.JOINT_ANGLE_TOLERANCE
 
-    def relToAbsolutePosition(self, points):
+    def rel_to_absolute_position(self, points):
         """
         Convert relative positions to absolute ones
         """
@@ -49,7 +49,7 @@ class BaxterTask(object):
                     point["y"] += initpoint["y"]
                     point["z"] += initpoint["z"]
 
-    def checkAngleLimits(self, angles, point):
+    def check_angle_limits(self, angles, point):
         """
         Check if angles values are out of bounds and print in logs
         """
@@ -89,7 +89,7 @@ class BaxterTask(object):
             thetas.append(pi/2 - thetas[1] - thetas[3])
             thetas.append(0)
 
-            self.checkAngleLimits(thetas, point)
+            self.check_angle_limits(thetas, point)
 
             results.append({"limb":point["limb"], "values":dict(zip(self._robot.get_limb(point["limb"]).joint_names(), thetas))})
 
@@ -101,14 +101,14 @@ class BaxterTask(object):
         """
         return self._config["name"]
 
-    def waitingToGrip(self):
+    def waiting_to_grip(self):
         """
         Waiting for the operator to adjust object in grippers
         """
-        self.gotoPoints(self._grippoints_angles)
-        self._robot.gripperControl()
+        self.goto_points(self._grippoints_angles)
+        self._robot.gripper_control()
 
-    def gotoPoints(self, points):
+    def goto_points(self, points):
         """
         Go to the given points
         """
@@ -130,11 +130,11 @@ class BaxterTask(object):
         self._robot.get_limb("left").set_joint_position_speed(self._config["speed"])
         self._robot.get_limb("right").set_joint_position_speed(self._config["speed"])
 
-        self.waitingToGrip()
-        self.gotoPoints(self._initpoints_angles)
-        self._robot.waitForStateChange(2)
-        self.gotoPoints(self._waypoints_angles)
-        self._robot.resetState()
+        self.waiting_to_grip()
+        self.goto_points(self._initpoints_angles)
+        self._robot.wait_for_state_change(2)
+        self.goto_points(self._waypoints_angles)
+        self._robot.reset_state()
 
         # Sleep for a few seconds
         rospy.sleep(3.0)
@@ -188,44 +188,44 @@ class BaxterRobot(object):
         rospy.logerr("%s does not name any limb", name)
         exit(1)
 
-    def connectButtonState(self):
+    def connect_button_state(self):
         """
         Connect button to change state of the state machine
         """
-        self._navigator_left.button2_changed.connect(self.incrementState)
-        self._navigator_right.button2_changed.connect(self.incrementState)
+        self._navigator_left.button2_changed.connect(self.increment_state)
+        self._navigator_right.button2_changed.connect(self.increment_state)
 
-    def disconnectButtonState(self):
+    def disconnect_button_state(self):
         """
         Disonnect button to change state of state machine
         """
-        self._navigator_left.button2_changed.disconnect(self.incrementState)
-        self._navigator_right.button2_changed.disconnect(self.incrementState)
+        self._navigator_left.button2_changed.disconnect(self.increment_state)
+        self._navigator_right.button2_changed.disconnect(self.increment_state)
 
-    def incrementState(self, value):
+    def increment_state(self, value):
         """
         Increment the state machine
         """
         if value:
             self.state += 1
 
-    def resetState(self):
+    def reset_state(self):
         """
         Reset state machine
         """
         self.state = 0
 
-    def gripperControl(self):
+    def gripper_control(self):
         """
         Activate gripper control by the wheel
         """
-        self._navigator_left.wheel_changed.connect(self.leftWheelMoved)
-        self._navigator_right.wheel_changed.connect(self.rightWheelMoved)
-        self.waitForStateChange(1)
-        self._navigator_left.wheel_changed.disconnect(self.leftWheelMoved)
-        self._navigator_right.wheel_changed.disconnect(self.rightWheelMoved)
+        self._navigator_left.wheel_changed.connect(self.left_wheel_moved)
+        self._navigator_right.wheel_changed.connect(self.right_wheel_moved)
+        self.wait_for_state_change(1)
+        self._navigator_left.wheel_changed.disconnect(self.left_wheel_moved)
+        self._navigator_right.wheel_changed.disconnect(self.right_wheel_moved)
 
-    def leftWheelMoved(self, value):
+    def left_wheel_moved(self, value):
         """
         Convert left wheel value to left gripper position
         """
@@ -236,7 +236,7 @@ class BaxterRobot(object):
             self._gripper_left_pos = 100.0
         self._gripper_left.command_position(self._gripper_left_pos)
 
-    def rightWheelMoved(self, value):
+    def right_wheel_moved(self, value):
         """
         Convert right wheel value to right gripper position
         """
@@ -247,14 +247,14 @@ class BaxterRobot(object):
             self._gripper_right_pos = 100.0
         self._gripper_right.command_position(self._gripper_right_pos)
 
-    def waitForStateChange(self, state):
+    def wait_for_state_change(self, state):
         """
         Waits for operator to ask next state
         """
-        self.connectButtonState()
+        self.connect_button_state()
         while (self.state != state) and not rospy.is_shutdown():
             rospy.sleep(1.0)
-        self.disconnectButtonState()
+        self.disconnect_button_state()
 
     def shutdown_robot(self):
         """
