@@ -14,7 +14,7 @@
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{backcolour}{rgb}{0.9,0.9,0.87}
 \colorlet{codered}{red!60!black}
  
 \lstdefinestyle{pythonColor}{
@@ -67,6 +67,8 @@
       {,}{{{\color{codered}{,}}}}{1},
 }
 
+\renewcommand{\lstlistingname}{Source code}
+
 \title{Robotics Project}
 \subtitle{Inverse kinematics for Baxter robot}
 \author{Vincent Ducastel \\ Alexandre La Grappe \\ Tom Vandenbussche \\ Julien Van Loo}
@@ -81,7 +83,10 @@
 \input{Text/InvKin}
 \clearpage
 
-\include{Text/Code}
+\input{Text/Code}
+\clearpage
+
+\input{Text/appendices.tex}
 \clearpage
 
 %\input{Text/References}

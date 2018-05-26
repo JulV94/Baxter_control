@@ -13,8 +13,19 @@ Another huge problem using this robot is the limit of the task and joint space o
 The task must be on a table so the range of displacement is quite limited but the place that was available on the table was close to the limit of its range. So the first point of reference had to be adjust to be at a good position.
 
 \section{Python code}
-\paragraph{}The code is written in Python programming language using rospy module\footnote{\url{https://github.com/ros/ros_comm}} and the baxter interface\footnote{\url{https://github.com/RethinkRobotics/baxter_interface}} to control the different parts of the robot. The code is made of 2 classes. The first one is the BaxterTask class that represents the task that we have to accomplish. To define the parameters of the task, a JSON file must be provided to the class containing everything needed such as the points the robot must achieve or the speed at which the robot must move. The other class is the BaxterRobot class which manage all the communications with the robot. Finally, the main function boils down to the creation of an instance of each of these classes and calls the execute function of the BaxterTask class.
-\lstinputlisting[language=Python, frame=single, style=pythonColor]{../project.py}
-\lstinputlisting[language=json, frame=single]{../task.json}
+\paragraph{}The code is written in Python programming language using rospy module\footnote{\url{https://github.com/ros/ros_comm}} and the baxter interface\footnote{\url{https://github.com/RethinkRobotics/baxter_interface}} to control the different parts of the robot. The code is made of 2 classes. 
+
+\subsection{BaxterTask class}
+The first one is the BaxterTask class that represents the task that we have to accomplish. To define the parameters of the task, a JSON file must be provided to the class containing everything needed such as the points the robot must achieve or the speed at which the robot must move. At initialisation of the task, all the points found in the JSON file are converted to joint angles using the inverse kinematics method explain in chapter~\ref{chap:inv kin}. The method \lstinline[language=Python, style=pythonColor]{inverse_kinematics} is in charge of this conversion. After the calculation of each point, the method \lstinline[language=Python, style=pythonColor]{check_angle_limits} verify that the angular positions asked by the inverse kinematics are physically feasible. If a value doesn't meet the requirements, a messaged is send as log with the missmatch in value.
+
+\subsection{BaxterRobot class}
+\paragraph{}The other class is the BaxterRobot class which manage all the communications with the robot. Finally, the main function boils down to the creation of an instance of each of these classes and calls the execute function of the BaxterTask class.
+
 
 \section{Result}
+ \begin{figure}[!ht]
+	\centering
+    \includegraphics[width = 0.7\textwidth]{Images/masterpiece-cropped.jpg}
+    \caption{Final drawing of the robot}
+    \label{fig:masterpiece}
+\end{figure}

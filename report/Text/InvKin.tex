@@ -8,9 +8,9 @@ The goal of the robotics project is to control the movement of a 7 DOF robot arm
 The robot used for this project is the Baxter and the task that it has to execute is a drawing.
 
 
-\section{Denativ-Hartenberg parameters}
+\section{Denavit-Hartenberg parameters}
 \subsection{Theoretical calculation}
-To be able to compute the inverse kinematics of a robot efficiently in a minimal and systematic way, the kinematics of the system can be described using Denativ-Hartenberg parameters. \\
+To be able to compute the inverse kinematics of a robot efficiently in a minimal and systematic way, the kinematics of the system can be described using Denavit-Hartenberg parameters. \\
 Before doing this, it is important to note that Baxter has seven joints for each arm (which means 7 degrees of freedom) while a task in the real world 3D space needs only six degrees of freedom, namely three rotations and three translations. Therefore, the arms of Baxter have one redundant degree of freedom for general tasks.\\
 Redundancy can be helpful for avoiding obstacles, increasing the range of the workspace or allow to reach a position and orientation by avoiding it nevertheless it adds complexity for the problem.\\
 The group has chosen in this case to fix a joint, $E_0$ not represented in the Figure (\ref{fig:prios}) but present on the information on Baxter website.\footnote{\url{http://sdk.rethinkrobotics.com/wiki/Hardware\_Specifications}} \\
